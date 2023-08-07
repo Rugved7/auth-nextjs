@@ -49,7 +49,7 @@ export default function Signin() {
         {/* Form for password */}
         <label
           htmlFor="password"
-          className="block text-sm font-bold mb-1 mt-2"
+          className="block text-sm font-bold mb-1 mt-2" 
         ></label>
         <input
           type="text"
