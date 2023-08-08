@@ -1,73 +1,70 @@
 "use client";
-
-// All the Imports
-import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-// import { axios } from "axios";
+import React, {useEffect} from "react";
+import {useRouter} from "next/navigation";
+import axios from "axios";
 
-// Sign in Component
 
-// what userdata we want to  gather
-export default function Login() {
-  const [user, setUser] = React.useState({
-    // what information I'm looking for
-    username: "",
-    password: "",
-    email: "",
-  });
-  // once user gives me this information , there should be a method to do sign up
-  const onLogin = async () => {};
+export default function LoginPage() {
+    const router = useRouter();
+    const [user, setUser] = React.useState({
+        email: "",
+        password: "",
+       
+    })
+    const [buttonDisabled, setButtonDisabled] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">Login</h1>
 
-      {/* Form for username */}
+    const onLogin = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post("/api/users/login", user);
+            console.log("Login success", response.data);
+            router.push("/profile");
+        } catch (error:any) {
+            console.log("Login failed", error.message);
+        } finally{
+        setLoading(false);
+        }
+    }
 
-      <form className="w-64">
-        <input
-          type="text"
-          id="username"
-          value={user.username}
-          onChange={(e) => setUser({ ...user, username: e.target.value })}
-          placeholder="username"
-          className="w-full px-3 py-2 border rounded mt-2"
-        />{" "}
-        {/* Here we have called setUser which sets the new username */}
-        {/* Form for password */}
-        <label
-          htmlFor="password"
-          className="block text-sm font-bold mb-1 mt-2"
-        ></label>
-        <input
-          type="text"
-          id="password"
-          value={user.password}
-          onChange={(e) => setUser({ ...user, password: e.target.value })}
-          placeholder="password"
-          className="w-full px-3 py-2 border rounded mt-2"
-        />{" "}
-        {/* Here we have called setUser which sets the new password */}
-        {/* Button for subbmitting the form */}
-        <br />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white font-bold py-2 px-4 mt-2 rounded"
-        >
-          Login
-        </button>
-      </form>
-      {/* Link to go to the Login page */}
-      <span>Not a Member ?</span>
-      <Link href="/signup">Sign up here </Link>
+    useEffect(() => {
+        if(user.email.length > 0 && user.password.length > 0) {
+            setButtonDisabled(false);
+        } else{
+            setButtonDisabled(true);
+        }
+    }, [user]);
 
-      {/* Return to Home Page */}
-      <Link href="/">
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-2">
-          Back to Home !
-        </button>
-      </Link>
-    </div>
-  );
+    return (
+    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+        <h1>{loading ? "Processing" : "Login"}</h1>
+        <hr />
+        
+        <label htmlFor="email">email</label>
+        <input 
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
+            id="email"
+            type="text"
+            value={user.email}
+            onChange={(e) => setUser({...user, email: e.target.value})}
+            placeholder="email"
+            />
+        <label htmlFor="password">password</label>
+        <input 
+        className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black"
+            id="password"
+            type="password"
+            value={user.password}
+            onChange={(e) => setUser({...user, password: e.target.value})}
+            placeholder="password"
+            />
+            <button
+            onClick={onLogin}
+            className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">Login here</button>
+            <Link href="/signup">Visit Signup page</Link>
+        </div>
+    )
+
 }

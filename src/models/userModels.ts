@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: [true, "Please Provide a username"],
@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
 
 // In nextjs there ia a catch on how we export Mongoose UserSchema
 
-const User = mongoose.models.users || mongoose.model("users,userSchema");
+const User = mongoose.models.users || mongoose.model("users",userSchema);
 export default User;
 
 // So code on const User = ... tells that if the users model is already present then load that else load the new one

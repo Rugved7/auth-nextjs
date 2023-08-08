@@ -13,12 +13,13 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     // Now extract everything from the request body what we'll be getting
     const { username, email, password } = reqBody;
+    console.log(reqBody);
 
     // check if the user already exists
     const user = await User.findOne({ email });
     if (user) {
       return NextResponse.json(
-        { message: "User already exists" },
+        { error: "User already exists" },
         { status: 400 }
       );
     }
@@ -38,11 +39,14 @@ export async function POST(request: NextRequest) {
 
     // Save the new user
     const savedUser = await newUser.save();
+    console.log(savedUser);
 
-    return NextResponse.json(
-      { message: "User created successfully" },
-      { status: 201 }
-    );
+    return NextResponse.json({
+      message: "User Created Successfully",
+      success: true,
+      savedUser
+    });
+
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 }); // Respond in JSON format with status code 500
   }
