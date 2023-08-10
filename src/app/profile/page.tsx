@@ -28,7 +28,7 @@ export default function profilePage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-3xl font-bold mb-4">Welcome to my Profile</h1>
+      <h1 className="text-3xl font-bold mb-4">Welcome to my Profile Page</h1>
 
       <form className="text-xl font-bold mb-4">
         <input type="text" placeholder="Profile information" />
